@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Browse Categories | Library MS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{layout/base :: #main-navbar}"></div>
+
+<main class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-dark mb-3">Browse Book Categories</h1>
+        <p class="lead text-muted">Discover your next great read by exploring our diverse collections.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4 col-sm-6" th:each="cat : ${categories}">
+            <!-- Dynamic styles based on category name -->
+            <a th:href="@{/books(categoryId=${cat.id})}" class="text-decoration-none">
+                <div class="card border-0 text-white h-100 stat-card"
+                     th:classappend="${
+                        #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bg-primary stat-card-blue' :
+                        #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bg-info stat-card-cyan' :
+                        #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bg-danger stat-card-red' :
+                        #strings.containsIgnoreCase(cat.name, 'Research') ? 'bg-secondary stat-card-gray' :
+                        #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bg-warning text-dark stat-card-orange' :
+                        #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bg-success stat-card-green' :
+                        #strings.containsIgnoreCase(cat.name, 'Science') ? 'bg-dark stat-card-black' :
+                        'bg-gradient-primary stat-card-blue'
+                     }"
+                     style="min-height: 180px; transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 1rem;">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center position-relative z-1">
+                        <!-- Dynamic Icon -->
+                        <i class="display-3 mb-3 opacity-75"
+                           th:classappend="${
+                              #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bi bi-laptop' :
+                              #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bi bi-cpu' :
+                              #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bi bi-book' :
+                              #strings.containsIgnoreCase(cat.name, 'Research') ? 'bi bi-file-earmark-text' :
+                              #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bi bi-emoji-smile' :
+                              #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bi bi-film' :
+                              #strings.containsIgnoreCase(cat.name, 'Science') ? 'bi bi-clipboard-data' :
+                              'bi bi-collection'
+                           }"></i>
+                        <h4 class="fw-bold mb-1" th:text="${cat.name}">Category Name</h4>
+                        <span class="badge bg-light text-dark rounded-pill mt-3 px-4 py-2 fs-6 shadow-sm">
+                            <span th:text="${cat.books.size()}">0</span> Books
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-12 text-center" th:if="${categories.isEmpty()}">
+            <div class="alert alert-light py-5 shadow-sm border-0">
+                <i class="bi bi-inbox display-1 text-muted mb-3 d-block"></i>
+                <h4 class="text-muted">No categories found</h4>
+                <p>Check back later for new additions!</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{layout/base :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Categories | Library MS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{layout/base :: #main-navbar}"></div>
+
+<div class="container-fluid mt-3">
+    <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${successMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${errorMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+</div>
+
+<main class="container py-3">
+    <h1 class="h3 fw-bold mb-4">
+        <i class="bi bi-tags text-primary me-2"></i>Book Categories
+    </h1>
+
+    <div class="row g-4">
+        <!-- Add Category Form -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white fw-semibold">
+                    <i class="bi bi-plus-circle me-2"></i>Add Category
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/categories/add}" method="post" id="add-category-form">
+                        <div class="mb-3">
+                            <label for="cat-name" class="form-label fw-semibold">Name *</label>
+                            <input type="text" id="cat-name" name="name"
+                                   class="form-control" placeholder="e.g. Science Fiction" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cat-desc" class="form-label fw-semibold">Description</label>
+                            <textarea id="cat-desc" name="description" class="form-control"
+                                      rows="2" placeholder="Optional description..."></textarea>
+                        </div>
+                        <button type="submit" id="add-cat-btn"
+                                class="btn btn-primary w-100">
+                            <i class="bi bi-save me-1"></i> Save Category
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom fw-semibold">
+                    All Categories (<span th:text="${categories.size()}">0</span>)
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0" id="categories-table">
+                        <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Books</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="cat : ${categories}">
+                            <td th:text="${cat.id}"></td>
+                            <td>
+                                <a th:href="@{/books(categoryId=${cat.id})}" class="fw-semibold text-decoration-none" th:text="${cat.name}"></a>
+                            </td>
+                            <td th:text="${cat.description ?: '—'}"></td>
+                            <td th:text="${cat.books.size()}"></td>
+                            <td>
+                                <form th:action="@{/admin/categories/{id}/delete(id=${cat.id})}"
+                                      method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Delete this category?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${categories.isEmpty()}">
+                            <td colspan="5" class="text-center text-muted py-3">No categories yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer mt-5 py-3 bg-dark text-light">
+    <div class="container text-center"><span>© 2024 Library Management System</span></div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

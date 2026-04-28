@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Overdue Books | Library MS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{layout/base :: #main-navbar}"></div>
+
+<main class="container-fluid py-3">
+    <div class="alert alert-warning d-flex align-items-center mb-4">
+        <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+        <div>
+            <h5 class="mb-0 fw-bold">Overdue Books</h5>
+            <small>The following books are past their due date and have not been returned.</small>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="overdue-table">
+                    <thead class="table-danger">
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Book</th>
+                        <th>Due Date</th>
+                        <th>Days Overdue</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${records}">
+                        <td th:text="${r.id}"></td>
+                        <td th:text="${r.user.username}"></td>
+                        <td th:text="${r.user.email}"></td>
+                        <td th:text="${r.book.title}"></td>
+                        <td class="text-danger fw-bold" th:text="${r.dueDate}"></td>
+                        <td class="text-danger fw-bold"
+                            th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(r.dueDate, T(java.time.LocalDate).now())} + ' day(s)'">
+                        </td>
+                        <td>
+                            <form th:action="@{/borrows/{id}/admin-return(id=${r.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Mark as returned?')">
+                                    <i class="bi bi-arrow-return-left"></i> Return
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${records.isEmpty()}">
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-check-circle text-success fs-1"></i>
+                            <p class="mt-2 mb-0">No overdue books! Great job.</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer mt-5 py-3 bg-dark text-light">
+    <div class="container text-center"><span>© 2024 Library Management System</span></div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

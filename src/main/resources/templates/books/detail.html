@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${book.title + ' | Library MS'}">Book Detail</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{layout/base :: #main-navbar}"></div>
+
+<div class="container-fluid mt-3">
+    <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${successMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${errorMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+</div>
+
+<main class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/books}">Books</a></li>
+            <li class="breadcrumb-item active" th:text="${book.title}"></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-3 text-center mb-4">
+            <div class="card border-0 shadow-sm p-4">
+                <i class="bi bi-book display-1 text-primary"></i>
+                <span class="badge mt-3"
+                      th:classappend="${book.availableCopies > 0} ? 'bg-success' : 'bg-danger'"
+                      th:text="${book.availableCopies > 0 ? 'Available' : 'Not Available'}">
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm p-4">
+                <h2 class="fw-bold" th:text="${book.title}">Title</h2>
+                <p class="text-muted fs-5" th:text="'by ' + ${book.author}"></p>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-4">
+                        <small class="text-muted d-block">ISBN</small>
+                        <strong th:text="${book.isbn}"></strong>
+                    </div>
+                    <div class="col-sm-4">
+                        <small class="text-muted d-block">Category</small>
+                        <strong th:text="${book.category.name}"></strong>
+                    </div>
+                    <div class="col-sm-4">
+                        <small class="text-muted d-block">Published Year</small>
+                        <strong th:text="${book.publishedYear ?: 'N/A'}"></strong>
+                    </div>
+                    <div class="col-sm-4">
+                        <small class="text-muted d-block">Total Copies</small>
+                        <strong th:text="${book.totalCopies}"></strong>
+                    </div>
+                    <div class="col-sm-4">
+                        <small class="text-muted d-block">Available</small>
+                        <strong th:text="${book.availableCopies}"></strong>
+                    </div>
+                </div>
+
+                <p th:text="${book.description ?: 'No description available.'}"
+                   class="text-secondary mb-4"></p>
+
+                <div class="d-flex gap-2">
+                    <!-- Borrow button (regular users) -->
+                    <form th:action="@{/books/{id}/borrow(id=${book.id})}" method="post"
+                          sec:authorize="hasRole('USER')">
+                        <button type="submit" id="borrow-btn"
+                                class="btn btn-success btn-lg"
+                                th:disabled="${book.availableCopies == 0}"
+                                onclick="return confirm('Borrow this book for 14 days?')">
+                            <i class="bi bi-bag-plus me-1"></i>
+                            Borrow Book
+                        </button>
+                    </form>
+
+                    <!-- Admin action buttons -->
+                    <a th:href="@{/books/{id}/edit(id=${book.id})}"
+                       sec:authorize="hasRole('ADMIN')"
+                       class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-pencil me-1"></i>Edit
+                    </a>
+                    <form th:action="@{/books/{id}/delete(id=${book.id})}"
+                          sec:authorize="hasRole('ADMIN')"
+                          method="post">
+                        <button type="submit" class="btn btn-outline-danger btn-lg"
+                                onclick="return confirm('Delete this book permanently?')">
+                            <i class="bi bi-trash me-1"></i>Delete
+                        </button>
+                    </form>
+
+                    <a th:href="@{/books}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-arrow-left me-1"></i>Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h4 class="fw-bold mb-4 border-bottom pb-2">
+                <i class="bi bi-star-fill text-warning me-2"></i>Reviews 
+                <span class="badge bg-secondary ms-2 fs-6" th:text="${#numbers.formatDecimal(book.getAverageRating(), 1, 1)} + ' / 5.0'">0.0 / 5.0</span>
+            </h4>
+        </div>
+        
+        <div class="col-md-5 mb-4">
+            <div class="card border-0 shadow-sm p-4 bg-light">
+                <h5 class="fw-semibold mb-3">Leave a Review</h5>
+                <div sec:authorize="isAuthenticated()">
+                    <form th:action="@{/books/{id}/review(id=${book.id})}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Rating</label>
+                            <div class="d-flex gap-3 fs-5 text-warning">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" id="r1" value="1" required>
+                                    <label class="form-check-label" for="r1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" id="r2" value="2">
+                                    <label class="form-check-label" for="r2">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" id="r3" value="3">
+                                    <label class="form-check-label" for="r3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" id="r4" value="4">
+                                    <label class="form-check-label" for="r4">4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" id="r5" value="5" checked>
+                                    <label class="form-check-label" for="r5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label text-muted">Your Feedback</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="What did you think of this book?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+                    </form>
+                </div>
+                <div sec:authorize="!isAuthenticated()" class="text-center py-4">
+                    <p class="text-muted">Please log in to leave a review.</p>
+                    <a th:href="@{/login}" class="btn btn-outline-primary">Log In</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div th:if="${reviews == null or reviews.isEmpty()}" class="alert alert-light text-center py-5 border-0 shadow-sm">
+                <i class="bi bi-chat-left-dots display-4 text-muted mb-3 d-block"></i>
+                <p class="text-muted mb-0">No reviews yet. Be the first to review this book!</p>
+            </div>
+            
+            <div th:if="${reviews != null and !reviews.isEmpty()}" class="d-flex flex-column gap-3">
+                <div th:each="review : ${reviews}" class="card border-0 shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-dark" th:text="${review.user.fullName}">User Name</strong>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, review.rating)}"></i>
+                            <i class="bi bi-star text-muted" th:if="${review.rating < 5}" th:each="i : ${#numbers.sequence(1, 5 - review.rating)}"></i>
+                        </div>
+                    </div>
+                    <p class="text-secondary mb-1" th:text="${review.comment}"></p>
+                    <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'MMM dd, yyyy')}">Date</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-dark text-light">
+    <div class="container text-center"><span>© 2024 Library Management System</span></div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
