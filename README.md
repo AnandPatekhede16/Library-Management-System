@@ -6,11 +6,15 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-brightgreen?style=for-the-badge&logo=springboot)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql)
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.x-green?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+
+### 🔴 LIVE DEMO: [https://library-management-system-0v3v.onrender.com](https://library-management-system-0v3v.onrender.com)
 
 **A fully featured, full-stack Library Management System built with Spring Boot 3, Hibernate, Spring Security, Thymeleaf, and MySQL. Supports role-based access control, email notifications, book borrowing, overdue tracking, fine calculation, and a real-time chat system.**
 
 </div>
+
 
 ---
 
@@ -351,24 +355,29 @@ library.socket.port=9090
 
 ---
 
-## 🌐 Deployment Guide
+## 🌐 Deployment Guide (Docker + Railway + Render)
 
-### Deploy on Render.com (Free)
+This project is fully configured for automated containerized deployment using Docker.
 
-1. Push code to GitHub (see below)
-2. Go to [https://render.com](https://render.com) → New Web Service → Connect GitHub repo
-3. Set:
-   - **Build Command:** `./mvnw clean package -DskipTests`
-   - **Start Command:** `java -jar target/library-management-system-1.0.0.jar`
-4. Add Environment Variables:
+### 1. Set up Cloud Database (Railway.app)
+1. Go to [https://railway.app](https://railway.app) and create a new project → **Deploy MySQL**.
+2. Go to the MySQL service → **Connect** tab → **Enable Public Networking**.
+3. Note down your Public Host, Port, User, and Password.
+
+### 2. Deploy Web App (Render.com)
+1. Go to [https://render.com](https://render.com) → **New Web Service** → Connect your GitHub repository.
+2. Render will automatically detect the `render.yaml` and `Dockerfile` in the repository and set the runtime to **Docker**.
+3. Add the following **Environment Variables** in the Render dashboard:
+   ```properties
+   DB_URL        = jdbc:mysql://<railway_public_host>:<railway_port>/railway?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+   DB_USERNAME   = root
+   DB_PASSWORD   = <railway_db_password>
+   MAIL_USERNAME = <your_gmail@gmail.com>
+   MAIL_PASSWORD = <your_16_char_app_password>
+   FINE_PER_DAY  = 20
    ```
-   DB_URL        = jdbc:mysql://<host>:<port>/library_db
-   DB_USERNAME   = your_db_user
-   DB_PASSWORD   = your_db_password
-   MAIL_USERNAME = your_gmail@gmail.com
-   MAIL_PASSWORD = your_app_password
-   ```
-5. Use Railway.app or PlanetScale for the cloud MySQL database
+4. Click **Create Web Service**. Render will build the Docker container and deploy your live app!
+
 
 ---
 
