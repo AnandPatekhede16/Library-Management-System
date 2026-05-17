@@ -3,7 +3,7 @@ services:
     name: library-management-system
     runtime: java
     plan: free
-    buildCommand: "./mvnw clean package -DskipTests"
+    buildCommand: "chmod +x mvnw && ./mvnw clean package -DskipTests"
     startCommand: "java -jar target/library-management-system-1.0.0.jar"
     healthCheckPath: /
     envVars:
@@ -19,3 +19,5 @@ services:
         sync: false
       - key: FINE_PER_DAY
         value: "20"
+      - key: JAVA_VERSION
+        value: "21"
