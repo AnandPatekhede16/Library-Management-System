@@ -1,10 +1,9 @@
 services:
   - type: web
     name: library-management-system
-    runtime: java
+    runtime: docker
     plan: free
-    buildCommand: "chmod +x mvnw && ./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/library-management-system-1.0.0.jar"
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /
     envVars:
       - key: DB_URL
@@ -19,5 +18,3 @@ services:
         sync: false
       - key: FINE_PER_DAY
         value: "20"
-      - key: JAVA_VERSION
-        value: "21"
