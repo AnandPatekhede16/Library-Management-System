@@ -30,6 +30,7 @@ public class BorrowService {
     private final BorrowRecordRepository borrowRecordRepository;
     private final BookService            bookService;
     private final UserService            userService;
+    private final EmailService           emailService;
 
     // ── Borrow a book ─────────────────────────────────────────────────────────
 
@@ -65,6 +66,14 @@ public class BorrowService {
         BorrowRecord saved = borrowRecordRepository.save(record);
         log.info("User '{}' borrowed book '{}' (record id={})",
             username, book.getTitle(), saved.getId());
+
+        // Send borrow confirmation email (async – failure won't affect the borrow transaction)
+        try {
+            emailService.sendBorrowConfirmation(saved);
+        } catch (Exception e) {
+            log.warn("Could not send borrow confirmation email: {}", e.getMessage());
+        }
+
         return saved;
     }
 

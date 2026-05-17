@@ -24,29 +24,29 @@
             <a th:href="@{/books(categoryId=${cat.id})}" class="text-decoration-none">
                 <div class="card border-0 text-white h-100 stat-card"
                      th:classappend="${
-                        #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bg-primary stat-card-blue' :
-                        #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bg-info stat-card-cyan' :
-                        #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bg-danger stat-card-red' :
-                        #strings.containsIgnoreCase(cat.name, 'Research') ? 'bg-secondary stat-card-gray' :
-                        #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bg-warning text-dark stat-card-orange' :
-                        #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bg-success stat-card-green' :
+                        #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bg-primary stat-card-blue' : (
+                        #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bg-info stat-card-cyan' : (
+                        #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bg-danger stat-card-red' : (
+                        #strings.containsIgnoreCase(cat.name, 'Research') ? 'bg-secondary stat-card-gray' : (
+                        #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bg-warning text-dark stat-card-orange' : (
+                        #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bg-success stat-card-green' : (
                         #strings.containsIgnoreCase(cat.name, 'Science') ? 'bg-dark stat-card-black' :
                         'bg-gradient-primary stat-card-blue'
-                     }"
+                     ))))))}"
                      style="min-height: 180px; transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 1rem;">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center position-relative z-1">
                         <!-- Dynamic Icon -->
                         <i class="display-3 mb-3 opacity-75"
                            th:classappend="${
-                              #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bi bi-laptop' :
-                              #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bi bi-cpu' :
-                              #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bi bi-book' :
-                              #strings.containsIgnoreCase(cat.name, 'Research') ? 'bi bi-file-earmark-text' :
-                              #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bi bi-emoji-smile' :
-                              #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bi bi-film' :
+                              #strings.containsIgnoreCase(cat.name, 'Computer') ? 'bi bi-laptop' : (
+                              #strings.containsIgnoreCase(cat.name, 'ENTC') ? 'bi bi-cpu' : (
+                              #strings.containsIgnoreCase(cat.name, 'Novel') ? 'bi bi-book' : (
+                              #strings.containsIgnoreCase(cat.name, 'Research') ? 'bi bi-file-earmark-text' : (
+                              #strings.containsIgnoreCase(cat.name, 'Comic') ? 'bi bi-emoji-smile' : (
+                              #strings.containsIgnoreCase(cat.name, 'Entertain') ? 'bi bi-film' : (
                               #strings.containsIgnoreCase(cat.name, 'Science') ? 'bi bi-clipboard-data' :
                               'bi bi-collection'
-                           }"></i>
+                           ))))))}"></i>
                         <h4 class="fw-bold mb-1" th:text="${cat.name}">Category Name</h4>
                         <span class="badge bg-light text-dark rounded-pill mt-3 px-4 py-2 fs-6 shadow-sm">
                             <span th:text="${cat.books.size()}">0</span> Books

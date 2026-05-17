@@ -82,6 +82,9 @@
                             <td th:text="${cat.description ?: '—'}"></td>
                             <td th:text="${cat.books.size()}"></td>
                             <td>
+                                <a th:href="@{/books/add(categoryId=${cat.id})}" class="btn btn-sm btn-outline-primary me-1" title="Add Book">
+                                    <i class="bi bi-plus-circle"></i>
+                                </a>
                                 <form th:action="@{/admin/categories/{id}/delete(id=${cat.id})}"
                                       method="post" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-outline-danger"

@@ -26,9 +26,17 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final PasswordEncoder    passwordEncoder;
 
+    private final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
     @Override
     @org.springframework.transaction.annotation.Transactional
     public void run(String... args) {
+        try {
+            log.info("Fixing password column length in users table...");
+            jdbcTemplate.execute("ALTER TABLE users MODIFY password VARCHAR(255)");
+        } catch (Exception e) {
+            log.warn("Could not alter users table: {}", e.getMessage());
+        }
 
         // ── Roles ──────────────────────────────────────────────────────────────
         Role adminRole = roleRepository.findByName("ROLE_ADMIN")

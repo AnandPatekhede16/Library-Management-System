@@ -16,9 +16,10 @@ if not exist %MAVEN_WRAPPER_JAR% (
 )
 
 @REM Run Maven via the wrapper jar
-"%JAVA_HOME%\bin\java.exe" ^
-    -Dmaven.multiModuleProjectDirectory="%MAVEN_PROJECTBASEDIR%" ^
-    -jar %MAVEN_WRAPPER_JAR% ^
+java.exe ^
+    -classpath %MAVEN_WRAPPER_JAR% ^
+    "-Dmaven.multiModuleProjectDirectory=%MAVEN_PROJECTBASEDIR:~0,-1%" ^
+    org.apache.maven.wrapper.MavenWrapperMain ^
     %*
 
 endlocal

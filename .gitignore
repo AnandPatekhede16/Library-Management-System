@@ -40,3 +40,21 @@ build/
 tools/
 logs/
 *.log
+
+### 🔐 Sensitive – NEVER push these to GitHub ###
+# Local dev credentials (contains real passwords)
+src/main/resources/application-local.properties
+# Real .env files (only .env.example is safe to push)
+.env
+.env.local
+.env.production
+
+### Scratch/debug files ###
+build_output.txt
+books_err.html
+cat.html
+cat.txt
+categories_response.html
+cookies.txt
+flow-error.txt
+out.html

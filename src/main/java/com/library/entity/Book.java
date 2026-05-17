@@ -51,6 +51,7 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Category category;
 
     /**
@@ -59,6 +60,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<BorrowRecord> borrowRecords = new HashSet<>();
 
     /**
@@ -67,6 +69,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private java.util.List<Review> reviews = new java.util.ArrayList<>();
 
     public double getAverageRating() {

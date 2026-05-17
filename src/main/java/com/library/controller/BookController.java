@@ -98,8 +98,10 @@ public class BookController {
 
     @GetMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addBookForm(Model model) {
-        model.addAttribute("book",       new BookDto());
+    public String addBookForm(@RequestParam(required = false) Long categoryId, Model model) {
+        BookDto dto = new BookDto();
+        dto.setCategoryId(categoryId);
+        model.addAttribute("book",       dto);
         model.addAttribute("categories", categoryService.findAll());
         return "books/form";
     }

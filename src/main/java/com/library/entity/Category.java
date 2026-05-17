@@ -35,5 +35,6 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Book> books = new HashSet<>();
 }

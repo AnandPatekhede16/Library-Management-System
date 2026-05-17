@@ -49,6 +49,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<Role> roles = new HashSet<>();
 
     /**
@@ -56,13 +57,16 @@ public class User {
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<BorrowRecord> borrowRecords = new HashSet<>();
 
     // ── Helper ──────────────────────────────────────────────────────────────
 
     /** Convenience method to add a role. */
     public void addRole(Role role) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
         this.roles.add(role);
-        role.getUsers().add(this);
     }
 }

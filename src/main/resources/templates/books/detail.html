@@ -87,6 +87,11 @@
                         </button>
                     </form>
 
+                    <!-- Read Preview Button -->
+                    <button type="button" class="btn btn-info btn-lg text-white shadow-sm" data-bs-toggle="modal" data-bs-target="#previewModal">
+                        <i class="bi bi-book-half me-1"></i> Read Preview
+                    </button>
+
                     <!-- Admin action buttons -->
                     <a th:href="@{/books/{id}/edit(id=${book.id})}"
                        sec:authorize="hasRole('ADMIN')"
@@ -180,6 +185,45 @@
                     </div>
                     <p class="text-secondary mb-1" th:text="${review.comment}"></p>
                     <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'MMM dd, yyyy')}">Date</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold" id="previewModalLabel"><i class="bi bi-book-half me-2"></i>Book Preview: <span th:text="${book.title}"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-5 py-4" style="font-family: Georgia, serif; font-size: 1.15rem; line-height: 1.8; color: #333;">
+                    <div class="text-center mb-5 mt-2">
+                        <h2 class="fw-bold" th:text="${book.title}">Book Title</h2>
+                        <h5 class="text-muted fst-italic" th:text="'by ' + ${book.author}">Author</h5>
+                    </div>
+                    
+                    <h4 class="text-center mb-4 mt-4 fw-bold">Chapter 1</h4>
+                    <p>The morning was crisp, carrying the scent of autumn leaves and impending rain. It had been years since I last walked these streets, yet the cobblestones felt perfectly familiar beneath my feet. As I approached the old library, its imposing wooden doors seemed to beckon me, whispering secrets of forgotten eras.</p>
+                    <p>Inside, the air was thick with the aroma of aged paper and leather bindings. Row upon row of towering bookshelves stretched into the dimly lit distance. A solitary figure stood near the front desk, their silhouette illuminated by a flickering reading lamp. "You've returned," a voice echoed softly, though the figure hadn't turned around.</p>
+                    <p>I stepped closer, my heart pounding against my ribs. "I had to," I replied, my voice barely above a whisper. "The book you gave me... it wasn't just a story."</p>
+                    <p>The figure finally turned, revealing piercing eyes that seemed to hold centuries of knowledge. "Of course not," they smiled faintly. "It was a key. And now, the real journey begins."</p>
+                    <div style="height: 20px;"></div>
+                    <h4 class="text-center mb-4 mt-3 fw-bold">Chapter 2</h4>
+                    <p>The map we unfurled on the grand oak table was unlike any I had ever seen. The continents were shifted, and the oceans bore names that belonged to myths. "This is the world as it truly is," my guide explained, tracing a glowing path with their finger. "Or rather, as it was before the Great Concealment."</p>
+                    <p>I traced the lines, mesmerized by the intricate details. "And our destination?" I asked.</p>
+                    <p>"The Isle of Echoes," they replied, tapping a remote speck in the northern sea. "But the path is treacherous. The shadows that hunt the pages will try to stop us."</p>
+                    <p>With a deep breath, I closed the ancient atlas. There was no turning back now. The words had already been written, and I was merely playing my part in a story much larger than myself.</p>
+                    
+                    <div class="text-center mt-5 mb-3 text-muted fst-italic">
+                        <div class="border-top w-50 mx-auto mt-4 pt-4"></div>
+                        <p><i class="bi bi-info-circle me-1"></i> End of preview.</p>
+                        <p>Borrow this book to continue reading!</p>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close Preview</button>
                 </div>
             </div>
         </div>

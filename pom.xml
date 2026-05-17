@@ -25,7 +25,7 @@
     <!-- ─── Java Version ─────────────────────────────────────────────────── -->
     <properties>
         <java.version>21</java.version>
-        <lombok.version>1.18.36</lombok.version>
+        <lombok.version>1.18.38</lombok.version>
     </properties>
 
     <!-- ─── Dependencies ─────────────────────────────────────────────────── -->
@@ -86,6 +86,12 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+
+        <!-- JavaMail – email sending via SMTP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <!-- Test -->

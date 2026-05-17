@@ -34,4 +34,8 @@ public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long
 
     /** Check whether a user already has an active borrow for a specific book. */
     boolean existsByUserIdAndBookIdAndStatus(Long userId, Long bookId, BorrowStatus status);
+
+    /** Records due exactly on targetDate that are still BORROWED – used by 3-day pre-due scheduler. */
+    @Query("SELECT br FROM BorrowRecord br WHERE br.dueDate = :targetDate AND br.status = 'BORROWED'")
+    List<BorrowRecord> findRecordsDueOn(@Param("targetDate") LocalDate targetDate);
 }

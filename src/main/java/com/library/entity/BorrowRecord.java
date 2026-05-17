@@ -27,12 +27,14 @@ public class BorrowRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     /** The book that was borrowed. */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Book book;
 
     @Column(name = "borrow_date", nullable = false)
